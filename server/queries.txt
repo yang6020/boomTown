@@ -1,0 +1,41 @@
+query getTags{
+  tags{
+    id
+    title
+  }
+}
+
+query getUser($id:ID!){
+  user(id:$id){
+    email
+    fullname
+    bio
+    items{
+      title
+      description
+    }
+    borrowed{
+      title
+      description
+    }
+  }
+}
+
+query getItems($filter:ID!){
+  items(filter:$filter){
+    title
+    imageurl
+    description
+    itemowner{
+      fullname
+      id
+    }
+    tags{
+      title
+    }
+    created
+    borrower{
+      fullname
+    }
+  }
+}
