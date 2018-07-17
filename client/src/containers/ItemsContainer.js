@@ -14,6 +14,10 @@ import {
 } from '../ApolloClient/queries'
 
 const itemsData = ({ render }) => {
+  return(
+<Query query={ALL_ITEMS_QUERY} variables={{filter:null}}>
+{({data:{items},loading})=> data.items}
+</Query>)}
   /**
    * @TODO: Use Apollo's <Query /> component to fetch all the items.
    *
@@ -21,9 +25,7 @@ const itemsData = ({ render }) => {
    *
    * The final query will ultimately filter out items that belong to the
    * currently logged-in user once you have added authentication.
-   */
-  return undefined
-}
+  */
 
 const userItemsData = ({ userId, render }) => {
   /**
