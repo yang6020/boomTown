@@ -120,7 +120,7 @@ module.exports = function(app) {
       // -------------------------------
       },
       async tags(parent,args,{pgResource},info) {
-        const tagsList = pgResource.getTagsForItem(parent.itemid);
+        const tagsList = pgResource.getTagsForItem(parent.id);
         // @TODO: Replace this mock retur n statement with the correct tags for the queried Item from Postgres
         return tagsList;
         // -------------------------------
