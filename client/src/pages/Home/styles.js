@@ -6,7 +6,8 @@ const styles = theme => ({
     padding: theme.spacing.unit * 5,
     [theme.breakpoints.up('md')]: {
       padding: theme.spacing.unit * 20
-    }
+    },
+    border: 0
   },
   headline: {
     fontWeight: 700,
@@ -20,6 +21,6 @@ const styles = theme => ({
     fontWeight: 400,
     color: 'white'
   }
-})
+});
 
-export default styles
+export default styles;

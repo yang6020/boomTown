@@ -35,8 +35,7 @@ const ItemFields = gql`
   }
 `
 export const ITEM_QUERY = gql`
-  query items($filter: ID!) {
-    # @TODO: Query an item by its id and return the ItemFields fragment.
+  query getItems($filter: ID){
     items(filter:$filter){
       ...ItemFields
     }
@@ -44,43 +43,44 @@ export const ITEM_QUERY = gql`
   ${ItemFields}
 `
 
-// export const ALL_ITEMS_QUERY = gql`
-//   query items($filter: ID) {
-//     item(filter:$filter){
-//       ...ItemFields
-//     }
-//     # @TODO: Query items (optionally by tag id) and return the ItemFields fragment.
-//   }
-//   ${ItemFields}
-// `
+export const ALL_ITEMS_QUERY = gql`
+  query items($filter: ID) {
+    items(filter:$filter){
+      ...ItemFields
+    }
+    # @TODO: Query items (optionally by tag id) and return the ItemFields fragment.
+  }
+  ${ItemFields}
+`
 
-// export const ALL_USER_ITEMS_QUERY = gql`
-//   query user($id: ID!) {
-//     {
-//       bio
-//       email
-//       fullname
-//       items{
-//         ...ItemFields
-//       }
-//       borrowed{
-//         ...ItemFields
-//       }
-//     }
-//     # @TODO: Query the bio, email, fullname, items, and borrowed for the user by id
-//     # Use the ItemFields fragment for the items and borrowed fields.
-//   }
-//   ${ItemFields}
-// `
+export const ALL_USER_ITEMS_QUERY = gql`
+  query GetUserItems($id: ID!) { 
+      user(id:$id){
+      bio
+      email
+      fullname
+      items{
+        ...ItemFields
+      }
+      borrowed{
+        ...ItemFields
+      }
+    
+    }
+    # @TODO: Query the bio, email, fullname, items, and borrowed for the user by id
+    # Use the ItemFields fragment for the items and borrowed fields.
+  }
+  ${ItemFields}
+`
 
-// export const ALL_TAGS_QUERY = gql`
-//   query {
-//     tags{
-//       id
-//       title
-//     }
-//   }
-// `
+export const ALL_TAGS_QUERY = gql`
+  query {
+    tags{
+      id
+      title
+    }
+  }
+`
 
 // export const ADD_ITEM_MUTATION = gql`
 //   mutation addItem($item: NewItemInput!, $image: Upload!) {
@@ -89,9 +89,9 @@ export const ITEM_QUERY = gql`
 //   }
 // `
 
-// /**
-//  * Auth-related queries and mutations.
-//  */
+/**
+ * Auth-related queries and mutations.
+ */
 
 // export const VIEWER_QUERY = gql`
 //   query {

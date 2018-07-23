@@ -39,3 +39,5 @@ query getItems($filter:ID!){
     }
   }
 }
+
+//SELECT * FROM items WHERE items.ownerid != $1 AND items.borrowerid != $1 OR items.borrowerid is NULL AND items.ownerid != $1

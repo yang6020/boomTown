@@ -1,7 +1,6 @@
 import { adopt } from 'react-adopt'
 import { Query, Mutation } from 'react-apollo'
 import React from 'react'
-
 // @TODO: Uncommment this line when the ViewerProvider is added to the app.
 // import { ViewerContext } from '../context/ViewerProvider'
 // -------------------------------
@@ -11,13 +10,15 @@ import {
   ALL_ITEMS_QUERY,
   ALL_USER_ITEMS_QUERY,
   ADD_ITEM_MUTATION
-} from '../ApolloClient/queries'
+} from '../apollo/queries'
 
 const itemsData = ({ render }) => {
   return(
-<Query query={ALL_ITEMS_QUERY} variables={{filter:null}}>
-{({data:{items},loading})=> data.items}
-</Query>)}
+<Query query={ALL_ITEMS_QUERY} variables={{filter: null}}>
+{({data: {items},loading,error})=> render({items,loading,error})}
+</Query>
+)}
+
   /**
    * @TODO: Use Apollo's <Query /> component to fetch all the items.
    *
@@ -34,31 +35,38 @@ const userItemsData = ({ userId, render }) => {
    * Note: Your query will need to retrieve only items that belong to a
    * specific user id.
    */
-  return undefined
+  return (<Query query={ALL_USER_ITEMS_QUERY} variables={{id:userId || 1}}>
+    {({data,loading,error})=> render({data,loading,error})}
+    </Query>)
 }
 
 const tagData = ({ render }) => {
   /**
    * @TODO: Use Apollo's <Query /> component to fetch all the tags.
    */
-  return undefined
+  return (<Query query={ALL_TAGS_QUERY} variables={{filter:null}}>
+    {({data:{tags},loading,error})=> render({tags,loading,error})}
+    </Query>)
 }
 
-const addItem = ({ render }) => {
-  /**
-   * @TODO: Use Apollo's <Mutation /> component to use the signup mutation.
-   *
-   * Note: Be sure to use `refetchQueries` to refresh Apollo's cache with the
-   * latest items for the user.
-   */
-  return undefined
-}
+// const addItem = ({ render }) => {
+//   /**
+//    * @TODO: Use Apollo's <Mutation /> component to use the signup mutation.
+//    *
+//    * Note: Be sure to use `refetchQueries` to refresh Apollo's cache with the
+//    * latest items for the user.
+//    */
+//   // return (<Query query={ALL_ITEMS_QUERY} variables={{filter:null}}>
+//   // {({data:{items},loading,error})=> render({items,loading,error})}
+//   // </Query>)
+// }
 const ItemsContainer = adopt({
   // @TODO: Uncomment each line as you write the corresponding query.
-  // tagData,
-  // itemsData,
-  // userItemsData,
-  // addItem
+
+  tagData,
+  itemsData,
+  userItemsData,
+  //addItem
   // -------------------------------
 })
 

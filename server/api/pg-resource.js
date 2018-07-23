@@ -1,4 +1,4 @@
-var strs = require('stringstream')
+var strs = require('stringstream');
 
 function tagsQueryString(tags, itemid, result) {
   /**
@@ -6,7 +6,7 @@ function tagsQueryString(tags, itemid, result) {
    * This function is recursive, and a little complicated.
    * Can you refactor it to be simpler / more readable?
    */
-  const length = tags.length
+  const length = tags.length;
   return length === 0
     ? `${result};`
     : tags.shift() &&
@@ -14,7 +14,7 @@ function tagsQueryString(tags, itemid, result) {
           tags,
           itemid,
           `${result}($${tags.length + 1}, ${itemid})${length === 1 ? '' : ','}`
-        )
+        );
 }
 
 module.exports = function(postgres) {
@@ -23,134 +23,98 @@ module.exports = function(postgres) {
       const newUserInsert = {
         text: 'INSERT INTO users($1,$2,$3)', // @TODO: Authentication - Server
         values: [fullname, email, password]
-      }
+      };
       try {
-        const user = await postgres.query(newUserInsert)
-        return user.rows[0]
+        const user = await postgres.query(newUserInsert);
+        return user.rows[0];
       } catch (e) {
         switch (true) {
           case /users_fullname_key/.test(e.message):
-            throw 'An account with this username already exists.'
+            throw 'An account with this username already exists.';
           case /users_email_key/.test(e.message):
-            throw 'An account with this email already exists.'
+            throw 'An account with this email already exists.';
           default:
-            throw 'There was a problem creating your account.'
+            throw 'There was a problem creating your account.';
         }
       }
     },
-    
+
     async getUserAndPasswordForVerification(email) {
       const findUserQuery = {
         text: 'SELECT * FROM users WHERE users.email=$1;', // @TODO: Authentication - Server
         values: [email]
-      }
+      };
       try {
-        const user = await postgres.query(findUserQuery)
-        if (!user) throw 'User was not found.'
-        return user.rows[0]
+        const user = await postgres.query(findUserQuery);
+        if (!user) throw 'User was not found.';
+        return user.rows[0];
       } catch (e) {
-        throw 'User was not found.'
+        throw 'User was not found.';
       }
     },
 
     async getUserById(id) {
-      /**
-       *  @TODO: Handling Server Errors
-       *
-       *  Inside of our resuorce methods we get to determine wen and how errors are returned
-       *  to our resolvers using try / catch / throw semantics.
-       *
-       *  Ideally, the errors that we'll throw from our resource should be able to be used by the client
-       *  to display user feedback. This means we'll be catching errors and throwing new ones.
-       *
-       *  Errors thrown from our resource will be captured and returned from our resolvers.
-       *
-       *  This will be the basic logic for this resource method:
-       *  1) Query for the user using the given id. If no user is found throw an error.
-       *  2) If there is an error with the query (500) throw an error.
-       *  3) If the user is found and there are no errors, return only the id, email, fullname, bio fields.
-       *     -- this is important,don't return the password!
-       *
-       *  You'll need to complete the query first before attempting this exercise.
-       */
-
       const findUserQuery = {
         text: 'SELECT * FROM users WHERE users.id=$1;', // @TODO: Basic queries
         values: [id]
-      }
-
-      /**
-       *  Refactor the following code using the error handling logic described above.
-       *  When you're done here, ensure all of the resource methods in this file
-       *  include a try catch, and throw appropriate errors.
-       *
-       *  Here is an example throw statement: throw 'User was not found.'
-       *  Customize your throw statements so the message can be used by the client.
-       */
+      };
       try {
-      const user = await postgres.query(findUserQuery)
-      return user.rows[0];}
-      catch(e){
-        throw 'User was not found.'
+        const user = await postgres.query(findUserQuery);
+        return user.rows[0];
+      } catch (e) {
+        throw 'User was not found.';
       }
-      // -------------------------------
     },
     async getItems(idToOmit) {
-      try{
-      const items = await postgres.query({
-        /**
-         *  @TODO: Advanced queries
-         *
-         *  Get all Items. If the idToOmit parameter has a value,
-         *  the query should only return Items were the ownerid column
-         *  does not contain the 'idToOmit'
-         *  
-         *  Hint: You'll need to use a conditional AND and WHERE clause
-         *  to your query text using string interpolation
-         */
-        text: `SELECT * FROM items WHERE items.ownerid != $1 AND items.borrowerid != $1 OR items.borrowerid is NULL AND items.ownerid != $1`,
-        values: idToOmit ? [idToOmit] : []
-      })
-      return items.rows}
-      catch(e){
-        throw 'Items were not found.'
+      let text = 'SELECT * FROM items';
+      if (idToOmit) {
+        text = `SELECT * FROM items WHERE items.ownerid != $1 AND items.borrowerid is NULL`;
+      }
+      try {
+        const items = await postgres.query({
+          text: text,
+          values: idToOmit ? [idToOmit] : []
+        });
+        return items.rows;
+      } catch (e) {
+        throw 'Items were not found.';
       }
     },
-    async getItemsForUser(id){
-      try{
-      const items = await postgres.query({
-        /**
-         *  @TODO: Advanced queries
-         *  Get all Items. Hint: You'll need to use a LEFT INNER JOIN among others
-         */
-        text: `SELECT * FROM items WHERE items.ownerid =$1;`,
-        values: [id]
-      })
-      return items.rows}
-      catch(e){
-        throw 'Items for user were not found.'
+    async getItemsForUser(id) {
+      try {
+        const items = await postgres.query({
+          /**
+           *  @TODO: Advanced queries
+           *  Get all Items. Hint: You'll need to use a LEFT INNER JOIN among others
+           */
+          text: `SELECT * FROM items WHERE items.ownerid =$1;`,
+          values: [id]
+        });
+        return items.rows;
+      } catch (e) {
+        throw 'Items for user were not found.';
       }
     },
     async getBorrowedItemsForUser(id) {
-      try{
-      const items = await postgres.query({
-        /**
-         *  @TODO: Advanced queries
-         *  Get all Items. Hint: You'll need to use a LEFT INNER JOIN among others
-         */
-        text: `SELECT * FROM items WHERE items.borrowerid =$1`,
-        values:[id]
-      })
-      return items.rows}
-      catch(e){
+      try {
+        const items = await postgres.query({
+          /**
+           *  @TODO: Advanced queries
+           *  Get all Items. Hint: You'll need to use a LEFT INNER JOIN among others
+           */
+          text: `SELECT * FROM items WHERE items.borrowerid =$1`,
+          values: [id]
+        });
+        return items.rows;
+      } catch (e) {
         throw 'Borrowed items were not found.';
       }
     },
     async getTags() {
-      try{
-      const tags = await postgres.query('SELECT * FROM tags')
-      return tags.rows}
-      catch(e){
+      try {
+        const tags = await postgres.query('SELECT * FROM tags');
+        return tags.rows;
+      } catch (e) {
         throw 'Tags were not found.';
       }
     },
@@ -158,15 +122,15 @@ module.exports = function(postgres) {
       const tagsQuery = {
         text: `SELECT * FROM tags INNER JOIN itemtags ON itemtags.tagid = tags.id WHERE itemtags.itemid = $1`, // @TODO: Advanced queries
         values: [id]
-      }
-      try{
-      const tags = await postgres.query(tagsQuery)
-      return tags.rows}
-      catch(e){
+      };
+      try {
+        const tags = await postgres.query(tagsQuery);
+        return tags.rows;
+      } catch (e) {
         throw 'Tags for item were not found.';
       }
-    },    
-    async saveNewItem({ item, image, user }) { 
+    },
+    async saveNewItem({ item, image, user }) {
       const makeItem = ``;
       /**
        *  @TODO: Adding a New Item
@@ -187,7 +151,7 @@ module.exports = function(postgres) {
        *  Read the method and the comments carefully before you begin.
        */
 
-      return new Promise((resolve, reject) => { 
+      return new Promise((resolve, reject) => {
         /**
          * Begin transaction by opening a long-lived connection
          * to a client from the client pool.
@@ -197,23 +161,21 @@ module.exports = function(postgres) {
             // Begin postgres transaction
             client.query('BEGIN', err => {
               // Convert image (file stream) to Base64
-              const imageStream = image.stream.pipe(strs('base64'))
+              const imageStream = image.stream.pipe(strs('base64'));
 
-              let base64Str = ''
+              let base64Str = '';
               imageStream.on('data', data => {
-                base64Str += data
-              })
+                base64Str += data;
+              });
 
               imageStream.on('end', async () => {
                 // Image has been converted, begin saving things
-               
-                const { title, description, tags } = item
-               
+
+                const { title, description, tags } = item;
 
                 // Generate new Item query
                 // @TODO
                 // -------------------------------
-
 
                 // Insert new Item
                 // @TODO
@@ -229,60 +191,59 @@ module.exports = function(postgres) {
                     'base64',
                     base64Str
                   ]
-                }
+                };
 
                 // Upload image
-                const uploadedImage = await client.query(imageUploadQuery)
-                const imageid = uploadedImage.rows[0].id
+                const uploadedImage = await client.query(imageUploadQuery);
+                const imageid = uploadedImage.rows[0].id;
 
                 // Generate image relation query
                 // @TODO
                 // -------------------------------
-                
+
                 // Insert image
                 // @TODO
                 // -------------------------------
-                
+
                 // Generate tag relationships query (use the'tagsQueryString' helper function provided)
                 // @TODO
                 // -------------------------------
 
                 // Insert tags
-                // @TODO 
+                // @TODO
                 // -------------------------------
-                
 
                 // Commit the entire transaction!
                 client.query('COMMIT', err => {
                   if (err) {
-                    throw err
+                    throw err;
                   }
                   // release the client back to the pool
-                  done()
+                  done();
                   // Uncomment this resolve statement when you're ready!
-                    //resolve(newItem.rows[0])
+                  //resolve(newItem.rows[0])
                   // -------------------------------
-                })
-              })
-            })
+                });
+              });
+            });
           } catch (e) {
             // Something went wrong
             client.query('ROLLBACK', err => {
               if (err) {
-                throw err
+                throw err;
               }
               // release the client back to the pool
-              done()
-            })
+              done();
+            });
             switch (true) {
               case /uploads_itemid_key/.test(e.message):
-                throw 'This item already has an image.'
+                throw 'This item already has an image.';
               default:
-                throw e
+                throw e;
             }
           }
-        })
-      })
+        });
+      });
     }
-  }
-}
+  };
+};

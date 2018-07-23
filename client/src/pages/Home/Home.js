@@ -8,9 +8,6 @@ import { Query } from "react-apollo";
 import AccountForm from '../../components/AccountForm'
 
 import styles from './styles'
-import { ITEM_QUERY } from '../../apollo/queries';
-
-
 const GET_TAGS = gql`
   {
     tags{
@@ -21,7 +18,7 @@ const GET_TAGS = gql`
 `;
 
 const Home = ({ classes }) => (
-  <Query query={ITEM_QUERY} variables={{"filter":2}}>
+  <Query query={GET_TAGS} variables={{"filter":2}}>
   {({loading,error,data})=>{
     if(loading) return 'Loading...';
     if(error) return `Error! ${error.message}`

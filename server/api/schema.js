@@ -1,4 +1,4 @@
-const { gql } = require('apollo-server')
+const { gql } = require('apollo-server');
 
 /**
  *  @TODO: Boomtown Schema
@@ -15,51 +15,51 @@ module.exports = gql`
   scalar Date
 
   type Item {
-    id:ID!
-    title:String!
-    imageurl:String
-    description:String!
-    itemowner:User!
-    tags:[Tag]
-    created:Date!
-    borrower:User
+    id: ID!
+    title: String!
+    imageurl: String
+    description: String!
+    itemowner: User!
+    tags: [Tag]
+    created: Date!
+    borrower: User
   }
 
   type User {
-    id:ID!
-    email:String!
-    fullname:String!
-    bio:String
-    items:[Item]
-    borrowed:[Item]
+    id: ID!
+    email: String!
+    fullname: String!
+    bio: String
+    items: [Item]
+    borrowed: [Item]
   }
-  
+
   type Tag {
-    id:ID!
-    title:String! 
+    id: ID!
+    title: String!
   }
 
   type File {
-    id:ID!
-    filename:String!
-    mimetype:String!
-    encoding:String!
-    itemid:ID!
+    id: ID!
+    filename: String!
+    mimetype: String!
+    encoding: String!
+    itemid: ID!
   }
 
   input AssignedTag {
-    id:ID!
-    title:String!
+    id: ID!
+    title: String!
   }
 
   input AssignedBorrower {
-    id:ID!
+    id: ID!
   }
 
   input NewItemInput {
-    title:String!
-    description:String
-    tags:[AssignedTag]
+    title: String!
+    description: String
+    tags: [AssignedTag]
   }
 
   type Query {
@@ -71,7 +71,6 @@ module.exports = gql`
 
   type Mutation {
     addItem(item: NewItemInput!): Item
-    image:[Upload]
+    image: [Upload]
   }
-
-`
+`;
