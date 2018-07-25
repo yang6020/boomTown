@@ -2,9 +2,6 @@ import { withStyles } from '@material-ui/core/styles';
 import React from 'react';
 import ItemsContainer from '../../containers/ItemsContainer';
 import styles from './styles';
-import ItemList from './ItemList';
-import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import ItemCards from '../../components/ItemCards';
 import Grid from '@material-ui/core/Grid';
 
@@ -24,7 +21,7 @@ const Items = ({ classes }) => {
               md={6}
               lg={4}
             >
-              <ItemCards {...item} />
+              <ItemCards item={item} key={item.id} />
             </Grid>
           ));
         }}

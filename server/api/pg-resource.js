@@ -21,7 +21,7 @@ module.exports = function(postgres) {
   return {
     async createUser({ fullname, email, password }) {
       const newUserInsert = {
-        text: 'INSERT INTO users($1,$2,$3)', // @TODO: Authentication - Server
+        text: 'INSERT INTO users(fullname,email,password) VALUES($1,$2,$3)', // @TODO: Authentication - Server
         values: [fullname, email, password]
       };
       try {

@@ -8,32 +8,33 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
-import styles from '../pages/Items/styles';
 import CardHeader from '@material-ui/core/CardHeader';
+const styles = theme => ({
+  card: {
+    height: '100%',
+    [theme.breakpoints.up('md')]: {
+      maxHeight: 500
+    }
+  },
+  media: {
+    height: 0,
+    paddingTop: '56.25%' // 16:9
+  }
+});
 
-const ItemCard = ({
-  id,
-  title,
-  imageurl,
-  description,
-  created,
-  itemowner,
-  tags,
-  classes
-}) => {
-  const itemTags = tags.map(tag => `${tag.title}`);
+const ItemCard = ({ classes, item }) => {
   return (
     <Card className={classes.card}>
       <CardMedia
         className={classes.media}
-        image="/static/images/cards/contemplative-reptile.jpg"
+        image="https://dummyimage.com/350x250/f9a825/000000&text=select+your+image+"
         title="Contemplative Reptile"
       />
       <CardContent>
         <CardHeader
           align="left"
           style={{ border: 0 }}
-          title={itemowner.fullname}
+          title={item.itemowner.fullname}
           avatar={
             <Avatar className={classes.avatar} style={{ border: 0 }}>
               J
@@ -42,13 +43,13 @@ const ItemCard = ({
         />
 
         <Typography align="left" gutterBottom variant="headline" component="h2">
-          {title}
+          {item.title}
         </Typography>
         <Typography align="left" component="p">
-          {itemTags.join(',')}
+          {item.tags.map(tag => `${tag.title}`).join(',')}
         </Typography>
         <Typography align="left" component="p">
-          {description}
+          {item.description}
         </Typography>
       </CardContent>
       <CardActions>
