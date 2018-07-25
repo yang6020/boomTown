@@ -90,6 +90,7 @@ module.exports = function(app) {
         const user = await context.pgResource.getUserAndPasswordForVerification(
           args.user.email
         );
+        console.log(user);
 
         /**
          *  @TODO: Authentication - Server
@@ -98,7 +99,7 @@ module.exports = function(app) {
          *  they submitted from the login form to decrypt the 'hashed' version stored in out database.
          */
         // Use bcrypt to compare the provided password to 'hashed' password stored in your database.
-        const valid = false;
+        const valid = await bcrypt.compare(args.user.password, user.password);
         // -------------------------------
         if (!valid || !user) throw 'User was not found.';
 
@@ -108,9 +109,7 @@ module.exports = function(app) {
           res: context.req.res
         });
 
-        return {
-          id: user.id
-        };
+        return true;
       } catch (e) {
         throw new AuthenticationError(e);
       }
