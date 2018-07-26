@@ -14,7 +14,7 @@ class Share extends Component {
         justify="center"
         alignItems="center"
       >
-        <Grid item xs={6}>
+        <Grid item xs={4}>
           <ShareItemPreview />
         </Grid>
         <Grid item xs={6}>

@@ -136,14 +136,13 @@ module.exports = function(app) {
          * or null in the case where the item has not been borrowed.
          */
         // -------------------------------
+      },
+      async imageurl({ imageurl, imageid, mimetype, data }) {
+        if (imageurl) return imageurl;
+        if (imageid) {
+          return `data:${mimetype};base64, ${data}`;
+        }
       }
-      // async imageurl({ imageurl, imageid, mimetype, data }) {
-      //   if (imageurl) return imageurl
-      //   if (imageid) {
-      //     return `data:${mimetype};base64, ${data}`
-      //   }
-      // }
-      // -------------------------------
     },
 
     Mutation: {

@@ -56,24 +56,28 @@ const tagData = ({ render }) => {
   );
 };
 
-// const addItem = ({ render }) => {
-//   /**
-//    * @TODO: Use Apollo's <Mutation /> component to use the signup mutation.
-//    *
-//    * Note: Be sure to use `refetchQueries` to refresh Apollo's cache with the
-//    * latest items for the user.
-//    */
-// return (<Query query={ALL_ITEMS_QUERY} variables={{filter:null}}>
-// {({data:{items},loading,error})=> render({items,loading,error})}
-// </Query>)
-// }
+const addItem = ({ render }) => {
+  /**
+   * @TODO: Use Apollo's <Mutation /> component to use the signup mutation.
+   *
+   * Note: Be sure to use `refetchQueries` to refresh Apollo's cache with the
+   * latest items for the user.
+   */
+  return (
+    <Mutation mutation={ADD_ITEM_MUTATION}>
+      {(mutation, { data, loading, error }) =>
+        render({ mutation, data, loading, error })
+      }
+    </Mutation>
+  );
+};
 const ItemsContainer = adopt({
   // @TODO: Uncomment each line as you write the corresponding query.
 
   tagData,
   itemsData,
-  userItemsData
-  //addItem
+  userItemsData,
+  addItem
   // -------------------------------
 });
 

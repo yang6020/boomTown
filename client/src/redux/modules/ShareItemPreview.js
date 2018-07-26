@@ -18,7 +18,7 @@ const initialState = {
   title: 'Name your item',
   description: 'Describe your item',
   tags: [],
-  imageUrl:
+  imageurl:
     'https://dummyimage.com/350x250/f9a825/000000&text=select+your+image+',
   created: new Date(),
   itemowner: {}

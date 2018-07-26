@@ -172,11 +172,15 @@ module.exports = function(postgres) {
                 // Image has been converted, begin saving things
 
                 const { title, description, tags } = item;
-
                 // Generate new Item query
                 // @TODO
                 // -------------------------------
+                // const newItemQuery ={
+                //   text:'INSERT INTO items(title,description,tags,',
+                //   values:[title,description,tags]
+                // }
 
+                // insertItemQuery
                 // Insert new Item
                 // @TODO
                 // -------------------------------
@@ -212,7 +216,11 @@ module.exports = function(postgres) {
                 // Insert tags
                 // @TODO
                 // -------------------------------
-
+                const insertTagsQuery = {
+                  text: tagsQueryString(tags, itemid, ''),
+                  values: tags
+                };
+                const tags = await client.query(tagsQuery);
                 // Commit the entire transaction!
                 client.query('COMMIT', err => {
                   if (err) {

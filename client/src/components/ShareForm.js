@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { FormSpy, Form, Field } from 'react-final-form';
-import { withStyles, TextField } from '@material-ui/core';
+import { withStyles, TextField, Typography, Button } from '@material-ui/core';
 import { connect } from 'react-redux';
 import {
   resetImage,
@@ -15,11 +15,51 @@ class ShareForm extends Component {
     this.state = {
       fileSelected: false,
       selectedTags: [],
-      submitted: false
+      submitted: false,
+      imageurl: ''
     };
+    this.fileRef = React.createRef();
   }
-  onSubmit = values => {};
+  applyTags(tags) {
+    return (
+      tags &&
+      tags
+        .filter(t => this.state.selectedTags.indexOf(t.id) > -1)
+        .map(t => ({ title: t.title, id: t.id }))
+    );
+  }
 
+  async saveItem(values, tags, addItem) {
+    console.log(values);
+    const {
+      validity,
+      files: [file]
+    } = this.fileInput.current;
+    if (!validity.valid || !file) return;
+    try {
+      const itemData = {
+        ...values,
+        tags: this.applyTags(tags)
+      };
+      await addItem.mutation({
+        variables: {
+          item: itemData,
+          image: file
+        }
+      });
+      this.setState({ done: true });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  componentWillUnmount = () => {
+    this.props.resetForm();
+  };
+  onSubmit = values => {};
+  handleImageSelect = event => {
+    this.setState({ fileSelected: event.target.files[0] });
+  };
   applyTags(tags) {
     return (
       tags &&
@@ -56,13 +96,16 @@ class ShareForm extends Component {
       tags: this.applyTags(tags)
     });
   }
+  handleSubmit = values => {
+    console.log(values);
+  };
 
   render() {
     const { resetImage, updateNewItem, resetNewItem } = this.props;
 
     return (
       <ItemsContainer>
-        {({ tagData: { tags, loading, error } }) => {
+        {({ addItem, tagData: { tags, loading, error } }) => {
           if (loading) {
             return 'loading...';
           }
@@ -74,7 +117,11 @@ class ShareForm extends Component {
               onSubmit={this.onSubmit}
               initialValues={{}}
               render={({ handleSubmit, submitting, pristine, values }) => (
-                <form onSubmit={handleSubmit}>
+                <form
+                  onSubmit={values => {
+                    this.saveItem(values, tags, addItem);
+                  }}
+                >
                   <FormSpy
                     subscription={{ values: true }}
                     component={({ values }) => {
@@ -84,6 +131,32 @@ class ShareForm extends Component {
                       return '';
                     }}
                   />
+                  <Typography variant="display4">
+                    Share. Borrow. Prosper.
+                  </Typography>
+                  <Field name="imageurl">
+                    {(input, meta) => (
+                      <Fragment>
+                        <Button
+                          onClick={() => {
+                            this.fileRef.current.click();
+                            // TODO: if i click this and there is an image
+                            // selected already, clear the image from the state
+                            // and start over.
+                          }}
+                        >
+                          Upload an Image!
+                        </Button>
+                        <input
+                          onChange={e => this.handleImageSelect(e)}
+                          type="file"
+                          accept="image/*"
+                          hidden
+                          ref={this.fileRef}
+                        />
+                      </Fragment>
+                    )}
+                  </Field>
                   <div>
                     <label>
                       <b>Item Name</b>
@@ -117,6 +190,16 @@ class ShareForm extends Component {
                         />
                       )}
                     </Field>
+                  </div>
+                  <div className="buttons">
+                    <Button
+                      variant="contained"
+                      disabled={submitting || pristine}
+                      color="primary"
+                      type="submit"
+                    >
+                      Submit
+                    </Button>
                   </div>
                 </form>
               )}
