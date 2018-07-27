@@ -36,12 +36,12 @@ module.exports = gql`
     borrowed: [Item]
   }
 
-  type Tag {
+  type Tag @auth {
     id: ID!
     title: String!
   }
 
-  type File {
+  type File @auth {
     id: ID!
     filename: String!
     mimetype: String!

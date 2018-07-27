@@ -163,7 +163,7 @@ module.exports = function(postgres) {
               // Convert image (file stream) to Base64
               const imageStream = image.stream.pipe(strs('base64'));
 
-              let base64Str = '';
+              let base64Str = 'data:image/*;base64, ';
               imageStream.on('data', data => {
                 base64Str += data;
               });
@@ -175,10 +175,12 @@ module.exports = function(postgres) {
                 // Generate new Item query
                 // @TODO
                 // -------------------------------
-                // const newItemQuery ={
-                //   text:'INSERT INTO items(title,description,tags,',
-                //   values:[title,description,tags]
-                // }
+                const newItemQuery = {
+                  text:
+                    'SELECT item.id, item.title,item.description,item.created, item.ownerid, item.borrowerid, up.data as imageurl  FROM items item INNER JOIN uploads up ON up.itemid = item.id',
+                  values: [title, description, tags, 1]
+                };
+                const newItem = client.query(newItemQuery);
 
                 // insertItemQuery
                 // Insert new Item
@@ -189,7 +191,7 @@ module.exports = function(postgres) {
                   text:
                     'INSERT INTO uploads (itemid, filename, mimetype, encoding, data) VALUES ($1, $2, $3, $4, $5) RETURNING *',
                   values: [
-                    itemid,
+                    newItem.rows[0].id,
                     image.filename,
                     image.mimetype,
                     'base64',
@@ -198,16 +200,7 @@ module.exports = function(postgres) {
                 };
 
                 // Upload image
-                const uploadedImage = await client.query(imageUploadQuery);
-                const imageid = uploadedImage.rows[0].id;
-
-                // Generate image relation query
-                // @TODO
-                // -------------------------------
-
-                // Insert image
-                // @TODO
-                // -------------------------------
+                await client.query(imageUploadQuery);
 
                 // Generate tag relationships query (use the'tagsQueryString' helper function provided)
                 // @TODO
@@ -216,9 +209,10 @@ module.exports = function(postgres) {
                 // Insert tags
                 // @TODO
                 // -------------------------------
-                const insertTagsQuery = {
-                  text: tagsQueryString(tags, itemid, ''),
-                  values: tags
+                const tagsQuery = {
+                  text:
+                    'INSERT INTO itemtags(itemid,tagid) VALUES ${tagsQueryString($1,$2,$3))',
+                  values: [tags, itemid, result]
                 };
                 const tags = await client.query(tagsQuery);
                 // Commit the entire transaction!

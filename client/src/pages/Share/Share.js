@@ -12,7 +12,8 @@ class Share extends Component {
         container
         className={classes.grid}
         justify="center"
-        alignItems="center"
+        align="center"
+        style={{ marginTop: 80 }}
       >
         <Grid item xs={4}>
           <ShareItemPreview />

@@ -9,10 +9,17 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 import CardHeader from '@material-ui/core/CardHeader';
+
 const styles = theme => ({
   card: {
     height: '100%',
     [theme.breakpoints.up('md')]: {
+      maxHeight: 500
+    },
+    [theme.breakpoints.up('sm')]: {
+      maxHeight: 500
+    },
+    [theme.breakpoints.up('xs')]: {
       maxHeight: 500
     }
   },
@@ -53,7 +60,12 @@ const ItemCard = ({ classes, item }) => {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" color="primary">
+        <Button
+          size="small"
+          color="secondary"
+          variant="outlined"
+          style={{ position: 'relative' }}
+        >
           BORROW
         </Button>
       </CardActions>

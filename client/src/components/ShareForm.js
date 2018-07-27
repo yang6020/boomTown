@@ -53,13 +53,11 @@ class ShareForm extends Component {
     }
   }
 
-  componentWillUnmount = () => {
-    this.props.resetForm();
-  };
   onSubmit = values => {};
   handleImageSelect = event => {
     this.setState({ fileSelected: event.target.files[0] });
   };
+
   applyTags(tags) {
     return (
       tags &&
@@ -68,6 +66,7 @@ class ShareForm extends Component {
         .map(tag => ({ title: tag.title, id: tag.id }))
     );
   }
+
   getBase64Url() {
     return new Promise(resolve => {
       const reader = new FileReader();
@@ -138,6 +137,8 @@ class ShareForm extends Component {
                     {(input, meta) => (
                       <Fragment>
                         <Button
+                          variant="contained"
+                          color="primary"
                           onClick={() => {
                             this.fileRef.current.click();
                             // TODO: if i click this and there is an image

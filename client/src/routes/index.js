@@ -5,6 +5,7 @@ import Items from '../pages/Items';
 import Profile from '../pages/Profile';
 import Share from '../pages/Share';
 import Header from '../pages/Header';
+
 export default () => (
   <Fragment>
     <Header />

@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import bIcon from '../images/boomtown.svg';
 import Icon from '@material-ui/icons/AddCircle';
+import { Link } from 'react-router-dom';
 
 const styles = {
   root: {
@@ -33,6 +34,8 @@ function ButtonAppBar(props) {
             className={classes.menuButton}
             color="inherit"
             aria-label="Menu"
+            component={Link}
+            to="/items"
           >
             <img alt="BOOMTOWN" src={bIcon} style={{ width: '90%' }} />
           </IconButton>
@@ -42,7 +45,7 @@ function ButtonAppBar(props) {
             className={classes.flex}
           />
 
-          <Button color="inherit">
+          <Button color="inherit" component={Link} to="/share">
             <Icon style={{ margin: '20px' }}>add_circle</Icon> SHARE SOMETHING
           </Button>
         </Toolbar>
