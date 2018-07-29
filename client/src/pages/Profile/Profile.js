@@ -1,16 +1,16 @@
-import { withStyles } from '@material-ui/core/styles'
-import React from 'react'
+import { withStyles } from '@material-ui/core/styles';
+import React from 'react';
 
-import styles from './styles'
+import styles from './styles';
 
 const Profile = ({ classes }) => {
   return (
     <div>
       <p>
-        This is the profile page located at <code>/profile/:userId</code>
+        This is the profile page located at <code>/profile/:id</code>
       </p>
     </div>
-  )
-}
+  );
+};
 
-export default withStyles(styles)(Profile)
+export default withStyles(styles)(Profile);

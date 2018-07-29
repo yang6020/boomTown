@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken');
+
 /**
  *  @TODO: Handling Server Errors
  *
@@ -27,7 +29,11 @@ module.exports = function(app) {
     //Date: DateScalar,
 
     Query: {
-      viewer() {
+      viewer(parent, args, context, info) {
+        if (context.token) {
+          return jwt.decode(context.token, app.get('JWT_SECRET'));
+        }
+        return null;
         /**
          * @TODO: Authentication - Server
          *
@@ -42,7 +48,6 @@ module.exports = function(app) {
          *  the token's stored user here. If there is no token, the user has signed out,
          *  in which case you'll return null
          */
-        return null;
       },
       async user(parent, { id }, { pgResource }, info) {
         try {
@@ -136,12 +141,6 @@ module.exports = function(app) {
          * or null in the case where the item has not been borrowed.
          */
         // -------------------------------
-      },
-      async imageurl({ imageurl, imageid, mimetype, data }) {
-        if (imageurl) return imageurl;
-        if (imageid) {
-          return `data:${mimetype};base64, ${data}`;
-        }
       }
     },
 
@@ -163,14 +162,14 @@ module.exports = function(app) {
          *  Again, you may look at the user resolver for an example of what
          *  destructuring should look like.
          */
-
-        image = await image;
+        const image = await args.image;
         const user = await jwt.decode(context.token, app.get('JWT_SECRET'));
         const newItem = await context.pgResource.saveNewItem({
           item: args.item,
-          image: args.image,
+          image: image,
           user
         });
+        console.log(item);
         return newItem;
       }
     }

@@ -39,13 +39,7 @@ function generateToken(user, secret) {
    *  which can be decoded using the app secret to retrieve the stateless session.
    */
   // Refactor this return statement to return the cryptographic hash (the Token)
-  return jwt.sign(
-    {
-      data: user
-    },
-    secret,
-    { expiresIn: '1h' }
-  );
+  return jwt.sign({ id, email, fullname, bio }, secret, { expiresIn: '1h' });
   // -------------------------------
 }
 
@@ -75,7 +69,7 @@ module.exports = function(app) {
 
         setCookie({
           tokenName: app.get('JWT_COOKIE_NAME'),
-          token: generateToken(args.user, app.get('JWT_SECRET')),
+          token: generateToken(user, app.get('JWT_SECRET')),
           res: context.req.res
         });
 
@@ -90,15 +84,6 @@ module.exports = function(app) {
         const user = await context.pgResource.getUserAndPasswordForVerification(
           args.user.email
         );
-        console.log(user);
-
-        /**
-         *  @TODO: Authentication - Server
-         *
-         *  To verify the user has provided the correct password, we'll use the provided password
-         *  they submitted from the login form to decrypt the 'hashed' version stored in out database.
-         */
-        // Use bcrypt to compare the provided password to 'hashed' password stored in your database.
         const valid = await bcrypt.compare(args.user.password, user.password);
         // -------------------------------
         if (!valid || !user) throw 'User was not found.';

@@ -10,7 +10,6 @@ const ItemFields = gql`
     #
     id
     title
-    imageurl
     description
     itemowner {
       id
@@ -35,8 +34,8 @@ const ItemFields = gql`
   }
 `;
 export const ITEM_QUERY = gql`
-  query getItems($filter: ID) {
-    items(filter: $filter) {
+  query {
+    items {
       ...ItemFields
     }
   }
@@ -44,7 +43,7 @@ export const ITEM_QUERY = gql`
 `;
 
 export const ALL_ITEMS_QUERY = gql`
-  query items($filter: ID) {
+  query getItems($filter: ID) {
     items(filter: $filter) {
       ...ItemFields
     }
@@ -83,9 +82,9 @@ export const ALL_TAGS_QUERY = gql`
 
 export const ADD_ITEM_MUTATION = gql`
   mutation addItem($item: NewItemInput!, $image: Upload!) {
-    # @TODO: Pass the item and image into the addItem mutation as arguments
-    # and return the new item id when the mutation is complete.
-    addItem(item: $item, image: $image)
+    addItem(item: $item, image: $image) {
+      id
+    }
   }
 `;
 
@@ -93,25 +92,31 @@ export const ADD_ITEM_MUTATION = gql`
  * Auth-related queries and mutations.
  */
 
-// export const VIEWER_QUERY = gql`
-//   query {
-//     # @TODO: Query the id, email, fullname, and bio fields for the viewer.
-//   }
-// `
-// export const LOGOUT_MUTATION = gql`
-//   mutation {
-//     # @TODO: Run the logout mutation.
-//   }
-// `
+export const VIEWER_QUERY = gql`
+  query {
+    viewer {
+      id
+      email
+      fullname
+      bio
+    }
+    # @TODO: Query the id, email, fullname, and bio fields for the viewer.
+  }
+`;
+export const LOGOUT_MUTATION = gql`
+  mutation {
+    logout
+  }
+`;
 
 export const SIGNUP_MUTATION = gql`
-  mutation($user: SignUpInput!) {
+  mutation signup($user: SignUpInput!) {
     signup(user: $user)
   }
 `;
 
 export const LOGIN_MUTATION = gql`
-  mutation($user: LoginInput!) {
+  mutation login($user: LoginInput!) {
     login(user: $user)
   }
 `;

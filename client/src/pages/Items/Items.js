@@ -4,6 +4,7 @@ import ItemsContainer from '../../containers/ItemsContainer';
 import styles from './styles';
 import ItemCards from '../../components/ItemCards';
 import Grid from '@material-ui/core/Grid';
+import { ViewerContext } from '../../context/ViewerProvider';
 
 const Items = ({ classes }) => {
   return (
@@ -12,18 +13,22 @@ const Items = ({ classes }) => {
         {({ itemsData: { loading, error, items } }) => {
           if (loading) return '...loading';
           if (error) return '...error';
-          return items.map(item => (
-            <Grid
-              className={classes.smallGrid}
-              item
-              xs={12}
-              sm={12}
-              md={6}
-              lg={4}
-            >
-              <ItemCards item={item} key={item.id} />
-            </Grid>
-          ));
+          console.log('aifhe');
+          return (
+            <div>
+              {items.map(item => (
+                <Grid
+                  className={classes.smallGrid}
+                  xs={12}
+                  sm={12}
+                  md={6}
+                  lg={4}
+                >
+                  <ItemCards item={item} key={item.id} />
+                </Grid>
+              ))}
+            </div>
+          );
         }}
       </ItemsContainer>
     </Grid>
@@ -31,19 +36,3 @@ const Items = ({ classes }) => {
 };
 
 export default withStyles(styles)(Items);
-
-{
-  /* <ItemList>
-        <ItemsContainer>
-      {({itemsData: {loading, error, items}}) => {
-        if(loading) return '...loading'
-        if(error) return '...error'
-        return (
-          items.map(item => {
-            return <div>{item.title}</div>
-          })
-        )
-      }}
-    </ItemsContainer> 
-    </ItemList>*/
-}

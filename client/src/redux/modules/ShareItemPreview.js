@@ -21,13 +21,16 @@ const initialState = {
   imageurl:
     'https://dummyimage.com/350x250/f9a825/000000&text=select+your+image+',
   created: new Date(),
-  itemowner: {}
+  itemowner: {
+    fullname: '',
+    email: ''
+  }
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
     case RESET_IMAGE: {
-      return { ...state, imageUrl: initialState.imageUrl };
+      return { ...state, imageurl: initialState.imageurl };
     }
     case UPDATE_NEW_ITEM: {
       return { ...state, ...action.payload };

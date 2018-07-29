@@ -67,7 +67,7 @@ module.exports = `
   input NewItemInput {
     title: String!
     description: String
-    tags: [AssignedTag]!
+    tags: [AssignedTag]
   }
 
   type Query {
@@ -84,4 +84,4 @@ module.exports = `
     signup(user: SignupInput!): User!
     addItem (item: NewItemInput!, image: Upload!): Item 
   }
-`
+`;

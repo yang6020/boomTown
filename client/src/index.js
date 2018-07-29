@@ -6,12 +6,13 @@ import client from './apollo';
 import Home from './pages/Home';
 import { ApolloProvider } from 'react-apollo';
 import { BrowserRouter as Router } from 'react-router-dom';
-
 import registerServiceWorker from './registerServiceWorker';
 import theme from './theme';
 import Routes from './routes/index.js';
 import { Provider as ReduxProvider } from 'react-redux';
 import store from './redux/index';
+import './index.css';
+import { ViewerProvider } from './context/ViewerProvider';
 
 /**
  * @TODO: Add the Viewer Context
@@ -28,17 +29,17 @@ import store from './redux/index';
 
 // -------------------------------
 
-import './index.css';
-
 const App = () => {
   return (
     <ReduxProvider store={store}>
       <MuiThemeProvider theme={theme}>
         <CssBaseline />
         <ApolloProvider client={client}>
-          <Router>
-            <Routes />
-          </Router>
+          <ViewerProvider>
+            <Router>
+              <Routes />
+            </Router>
+          </ViewerProvider>
         </ApolloProvider>
       </MuiThemeProvider>
     </ReduxProvider>

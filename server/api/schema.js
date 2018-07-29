@@ -16,10 +16,9 @@ module.exports = gql`
 
   directive @auth on OBJECT | FIELD_DEFINITION
 
-  type Item @auth {
+  type Item {
     id: ID!
     title: String!
-    imageurl: String
     description: String!
     itemowner: User!
     tags: [Tag]
@@ -27,7 +26,7 @@ module.exports = gql`
     borrower: User
   }
 
-  type User @auth {
+  type User {
     id: ID!
     email: String!
     fullname: String!
@@ -36,12 +35,12 @@ module.exports = gql`
     borrowed: [Item]
   }
 
-  type Tag @auth {
+  type Tag {
     id: ID!
     title: String!
   }
 
-  type File @auth {
+  type File {
     id: ID!
     filename: String!
     mimetype: String!
@@ -84,8 +83,8 @@ module.exports = gql`
   type Mutation {
     addItem(item: NewItemInput!, image: Upload!): Item
     image: [Upload]
-    signup(user: SignUpInput!): Boolean
-    login(user: LoginInput!): Boolean
-    logout: Boolean
+    signup(user: SignUpInput!): Boolean!
+    login(user: LoginInput!): Boolean!
+    logout: Boolean!
   }
 `;

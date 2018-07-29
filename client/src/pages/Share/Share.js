@@ -1,7 +1,7 @@
 import { withStyles, Grid } from '@material-ui/core';
 import styles from './styles';
 import React, { Component } from 'react';
-import ShareForm from '../../components/ShareForm';
+import ShareForm from '../../components/ShareItemForm/ShareItemForm';
 import ShareItemPreview from '../../components/ShareItemPreview';
 
 class Share extends Component {

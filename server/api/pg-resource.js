@@ -21,7 +21,8 @@ module.exports = function(postgres) {
   return {
     async createUser({ fullname, email, password }) {
       const newUserInsert = {
-        text: 'INSERT INTO users(fullname,email,password) VALUES($1,$2,$3)', // @TODO: Authentication - Server
+        text:
+          'INSERT INTO users(fullname,email,password) VALUES($1,$2,$3)RETURNING *', // @TODO: Authentication - Server
         values: [fullname, email, password]
       };
       try {
@@ -41,7 +42,7 @@ module.exports = function(postgres) {
 
     async getUserAndPasswordForVerification(email) {
       const findUserQuery = {
-        text: 'SELECT * FROM users WHERE users.email=$1;', // @TODO: Authentication - Server
+        text: 'SELECT * FROM users WHERE users.email=$1', // @TODO: Authentication - Server
         values: [email]
       };
       try {
@@ -65,18 +66,22 @@ module.exports = function(postgres) {
         throw 'User was not found.';
       }
     },
+
     async getItems(idToOmit) {
-      let text = 'SELECT * FROM items';
+      let text = `SELECT * FROM items`;
       if (idToOmit) {
-        text = `SELECT * FROM items WHERE items.ownerid != $1 AND items.borrowerid is NULL`;
+        text = `SELECT * FROM items WHERE $1 != items.ownerid`;
       }
+
       try {
         const items = await postgres.query({
           text: text,
           values: idToOmit ? [idToOmit] : []
         });
+
         return items.rows;
       } catch (e) {
+        console.log(e);
         throw 'Items were not found.';
       }
     },
@@ -112,8 +117,8 @@ module.exports = function(postgres) {
     },
     async getTags() {
       try {
-        const tags = await postgres.query('SELECT * FROM tags');
-        return tags.rows;
+        const alltags = await postgres.query('SELECT * FROM tags');
+        return alltags.rows;
       } catch (e) {
         throw 'Tags were not found.';
       }
@@ -124,14 +129,13 @@ module.exports = function(postgres) {
         values: [id]
       };
       try {
-        const tags = await postgres.query(tagsQuery);
-        return tags.rows;
+        const gettagsid = await postgres.query(tagsQuery);
+        return gettagsid.rows;
       } catch (e) {
         throw 'Tags for item were not found.';
       }
     },
     async saveNewItem({ item, image, user }) {
-      const makeItem = ``;
       /**
        *  @TODO: Adding a New Item
        *
@@ -177,10 +181,11 @@ module.exports = function(postgres) {
                 // -------------------------------
                 const newItemQuery = {
                   text:
-                    'SELECT item.id, item.title,item.description,item.created, item.ownerid, item.borrowerid, up.data as imageurl  FROM items item INNER JOIN uploads up ON up.itemid = item.id',
-                  values: [title, description, tags, 1]
+                    'INSERT INTO items (title, description, ownerid) VALUES ($1, $2, $3) RETURNING *',
+                  values: [title, description, user.id]
                 };
                 const newItem = client.query(newItemQuery);
+                const itemid = newItem.rows[0].id;
 
                 // insertItemQuery
                 // Insert new Item
@@ -191,7 +196,7 @@ module.exports = function(postgres) {
                   text:
                     'INSERT INTO uploads (itemid, filename, mimetype, encoding, data) VALUES ($1, $2, $3, $4, $5) RETURNING *',
                   values: [
-                    newItem.rows[0].id,
+                    itemid,
                     image.filename,
                     image.mimetype,
                     'base64',
@@ -210,9 +215,13 @@ module.exports = function(postgres) {
                 // @TODO
                 // -------------------------------
                 const tagsQuery = {
-                  text:
-                    'INSERT INTO itemtags(itemid,tagid) VALUES ${tagsQueryString($1,$2,$3))',
-                  values: [tags, itemid, result]
+                  text: `
+                    INSERT INTO itemtags(tagid, itemid) VALUES ${tagsQueryString(
+                      [...tags],
+                      itemid,
+                      ''
+                    )}`,
+                  values: tags.map(tag => tag.id)
                 };
                 const tags = await client.query(tagsQuery);
                 // Commit the entire transaction!
@@ -223,7 +232,7 @@ module.exports = function(postgres) {
                   // release the client back to the pool
                   done();
                   // Uncomment this resolve statement when you're ready!
-                  //resolve(newItem.rows[0])
+                  resolve(newItem.rows[0]);
                   // -------------------------------
                 });
               });
