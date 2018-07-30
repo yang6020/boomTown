@@ -138,7 +138,9 @@ class AccountForm extends Component {
                       </Typography>
                     </Grid>
                   </FormControl>
-                  <Typography className={classes.errorMessage} />
+                  <Typography className={classes.errorMessage}>
+                    {login.error ? 'email/password is incorrect' : null}
+                  </Typography>
                 </form>
               )}
             />
