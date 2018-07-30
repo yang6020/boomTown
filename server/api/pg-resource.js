@@ -103,7 +103,7 @@ module.exports = function(postgres) {
           FROM items item
           INNER JOIN uploads up
           ON up.itemid = item.id
-          WHERE item.ownerid != $1 AND item.borrowerid is NULL`,
+          WHERE item.ownerid = $1`,
           values: [id]
         });
         return items.rows;

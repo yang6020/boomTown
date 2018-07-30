@@ -69,7 +69,7 @@ const ItemCard = ({ classes, item }) => {
           size="large"
           color="secondary"
           variant="outlined"
-          style={{ position: 'relative', bottom: 10 }}
+          style={{ position: 'relative' }}
         >
           BORROW
         </Button>

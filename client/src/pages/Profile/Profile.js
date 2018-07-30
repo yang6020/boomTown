@@ -10,7 +10,7 @@ import { Typography } from '../../../node_modules/@material-ui/core';
 const Profile = ({ classes, match }) => {
   return (
     <ItemsContainer id={match.params.userid}>
-      {({ userItemsData: { loading, error, user, viewer } }) => {
+      {({ userItemsData: { loading, error, user } }) => {
         if (loading) return '...loading';
         if (error) return '...error';
         return (
