@@ -20,7 +20,6 @@ const Items = ({ classes }) => {
         {({ itemsData: { loading, error, items } }) => {
           if (loading) return '...loading';
           if (error) return '...error';
-          console.log(items);
           return items.map(item => (
             <Grid
               item

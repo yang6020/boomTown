@@ -9,7 +9,8 @@ const styles = theme => ({
     flexGrow: 1,
     minHeight: '100%',
     background: theme.palette.secondary.main,
-    padding: theme.spacing.unit * 5
+    padding: theme.spacing.unit * 5,
+    paddingTop: 82
   },
 
   actions: {

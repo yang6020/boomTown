@@ -8,7 +8,8 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 import CardHeader from '@material-ui/core/CardHeader';
-
+import Gravatar from 'react-gravatar';
+import { ALL_USER_ITEMS_QUERY } from '../apollo/queries';
 const styles = theme => ({
   card: {
     display: 'flex',
@@ -39,28 +40,36 @@ const ItemCard = ({ classes, item }) => {
           style={{ border: 0 }}
           title={item.itemowner.fullname}
           avatar={
-            <Avatar className={classes.avatar} style={{ border: 0 }}>
-              J
-            </Avatar>
+            <Gravatar
+              align="left"
+              style={{ marginLeft: -30, marginTop: -20 }}
+              email={item.itemowner.email}
+            />
           }
         />
 
-        <Typography align="left" gutterBottom variant="headline" component="h2">
+        <Typography
+          align="left"
+          gutterBottom
+          variant="headline"
+          component="h2"
+          style={{ marginTop: 15 }}
+        >
           {item.title}
         </Typography>
-        <Typography align="left" component="p">
+        <Typography align="left" component="p" style={{ color: '#696969' }}>
           {item.tags.map(tag => `${tag.title}`).join(',')}
         </Typography>
-        <Typography align="left" component="p">
+        <Typography align="left" component="p" style={{ paddingBottom: 10 }}>
           {item.description}
         </Typography>
       </CardContent>
-      <CardActions>
+      <CardActions style={{ paddingBottom: 15 }}>
         <Button
-          size="small"
+          size="large"
           color="secondary"
           variant="outlined"
-          style={{ position: 'relative' }}
+          style={{ position: 'relative', bottom: 10 }}
         >
           BORROW
         </Button>

@@ -13,9 +13,9 @@ class Share extends Component {
         className={classes.grid}
         justify="space-around"
         alignItems="center"
-        style={{ marginTop: 50 }}
+        style={{ marginTop: 30 }}
       >
-        <Grid item xs={4}>
+        <Grid item xs={4} style={{ height: '70%' }}>
           <ShareItemPreview />
         </Grid>
         <Grid item xs={6}>

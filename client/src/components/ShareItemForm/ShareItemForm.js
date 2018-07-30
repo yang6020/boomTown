@@ -164,12 +164,13 @@ class ShareForm extends Component {
                     variant="display3"
                     style={{ paddingBottom: 50, color: 'black' }}
                   >
-                    Share. Borrow. Prosper.
+                    <b>Share. Borrow. Prosper.</b>
                   </Typography>
                   <Field name="imageurl">
                     {(input, meta) => (
                       <Fragment>
                         <Button
+                          style={{ width: '100%' }}
                           variant="contained"
                           color="primary"
                           onClick={() => {
@@ -179,7 +180,7 @@ class ShareForm extends Component {
                             // and start over.
                           }}
                         >
-                          Upload an Image!
+                          Select an Image!
                         </Button>
                         <input
                           onChange={e => this.handleImageSelect(e)}
@@ -192,9 +193,6 @@ class ShareForm extends Component {
                     )}
                   </Field>
                   <div>
-                    <label style={{ paddingTop: 20 }}>
-                      <b>Item Name</b>
-                    </label>
                     <Field
                       component="input"
                       name="title"
@@ -203,7 +201,11 @@ class ShareForm extends Component {
                     >
                       {({ input, meta }) => (
                         <TextField
-                          style={{ marginLeft: 60, paddingTop: 20 }}
+                          style={{
+                            paddingTop: 20,
+                            width: '100%',
+                            paddingBottom: 20
+                          }}
                           placeholder="Name your Item"
                           {...input}
                         />
@@ -211,9 +213,6 @@ class ShareForm extends Component {
                     </Field>
                   </div>
                   <div>
-                    <label>
-                      <b>Item Description</b>
-                    </label>
                     <Field
                       component="input"
                       name="description"
@@ -222,7 +221,7 @@ class ShareForm extends Component {
                     >
                       {({ input, meta }) => (
                         <TextField
-                          style={{ marginLeft: 20 }}
+                          style={{ width: '100%' }}
                           placeholder="Name your description"
                           multiline
                           {...input}
@@ -236,6 +235,7 @@ class ShareForm extends Component {
                     </label>
                     <Select
                       multiple
+                      style={{ width: '91%' }}
                       value={this.state.selectedTags}
                       onChange={event => this.handleCheckbox(event)}
                       input={<Input />}
@@ -264,7 +264,7 @@ class ShareForm extends Component {
                       color="primary"
                       type="submit"
                     >
-                      Submit
+                      Share
                     </Button>
                   </div>
                 </form>
