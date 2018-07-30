@@ -9,7 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import bIcon from '../images/boomtown.svg';
 import Icon from '@material-ui/icons/AddCircle';
 import { Link } from 'react-router-dom';
-
+import DropDown from '../components/DropDown';
 const styles = {
   root: {
     flexGrow: 1
@@ -45,9 +45,18 @@ function ButtonAppBar(props) {
             className={classes.flex}
           />
 
-          <Button color="inherit" component={Link} to="/share">
+          <Button
+            style={{ boxShadow: 'none', backgroundColor: 'transparent' }}
+            variant="extendedFab"
+            color="inherit"
+            component={Link}
+            to="/share"
+          >
             <Icon style={{ margin: '20px' }}>add_circle</Icon> SHARE SOMETHING
           </Button>
+          <IconButton>
+            <DropDown />
+          </IconButton>
         </Toolbar>
       </AppBar>
     </div>

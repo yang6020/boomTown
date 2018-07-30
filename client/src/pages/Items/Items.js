@@ -17,7 +17,7 @@ const Items = ({ classes }) => {
       height="100%"
     >
       <ItemsContainer>
-        {({ itemData: { loading, error, items } }) => {
+        {({ itemsData: { loading, error, items } }) => {
           if (loading) return '...loading';
           if (error) return '...error';
           console.log(items);

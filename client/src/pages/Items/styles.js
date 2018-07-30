@@ -5,7 +5,7 @@ const styles = theme => ({
     padding: '12px'
   },
   root: {
-    marginTop: 80,
+    marginTop: 50,
     flexGrow: 1,
     minHeight: '100%',
     background: theme.palette.secondary.main,

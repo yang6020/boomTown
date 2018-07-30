@@ -160,7 +160,10 @@ class ShareForm extends Component {
                       return '';
                     }}
                   />
-                  <Typography variant="display4">
+                  <Typography
+                    variant="display3"
+                    style={{ paddingBottom: 50, color: 'black' }}
+                  >
                     Share. Borrow. Prosper.
                   </Typography>
                   <Field name="imageurl">
@@ -189,7 +192,7 @@ class ShareForm extends Component {
                     )}
                   </Field>
                   <div>
-                    <label>
+                    <label style={{ paddingTop: 20 }}>
                       <b>Item Name</b>
                     </label>
                     <Field
@@ -197,10 +200,13 @@ class ShareForm extends Component {
                       name="title"
                       type="text"
                       label="Item Name"
-                      style={{ marginLeft: '15px' }}
                     >
                       {({ input, meta }) => (
-                        <TextField placeholder="Name your Item" {...input} />
+                        <TextField
+                          style={{ marginLeft: 60, paddingTop: 20 }}
+                          placeholder="Name your Item"
+                          {...input}
+                        />
                       )}
                     </Field>
                   </div>
@@ -213,10 +219,10 @@ class ShareForm extends Component {
                       name="description"
                       type="text"
                       label="Item Description"
-                      style={{ marginLeft: '15px' }}
                     >
                       {({ input, meta }) => (
                         <TextField
+                          style={{ marginLeft: 20 }}
                           placeholder="Name your description"
                           multiline
                           {...input}
@@ -225,6 +231,9 @@ class ShareForm extends Component {
                     </Field>
                   </div>
                   <div>
+                    <label>
+                      <b>Tags:</b>
+                    </label>
                     <Select
                       multiple
                       value={this.state.selectedTags}
@@ -248,7 +257,7 @@ class ShareForm extends Component {
                       }
                     </Select>
                   </div>
-                  <div className="buttons">
+                  <div style={{ paddingTop: 20 }}>
                     <Button
                       variant="contained"
                       disabled={submitting || pristine}
