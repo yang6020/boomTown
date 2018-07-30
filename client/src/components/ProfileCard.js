@@ -4,10 +4,15 @@ import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import Gravatar from 'react-gravatar';
+import CardHeader from '@material-ui/core/CardHeader';
 
 const styles = {
   card: {
-    minWidth: 275
+    minWidth: 275,
+    minHeight: 250,
+    marginLeft: 40,
+    marginRight: 40
   },
   bullet: {
     display: 'inline-block',
@@ -24,23 +29,34 @@ const styles = {
 };
 
 function ProfileCard(props) {
-  const { classes } = props;
+  const { classes, user } = props;
   const bull = <span className={classes.bullet}>•</span>;
 
   return (
     <div>
       <Card className={classes.card}>
+        <CardHeader
+          avatar={<Gravatar email={user.email} />}
+          title={
+            <Typography variant="display2" component="h1">
+              {user.fullname}
+            </Typography>
+          }
+          style={{ marginTop: 35, marginLeft: 20 }}
+        />
         <CardContent>
-          <Typography className={classes.title} color="textSecondary">
-            Word of the Day
+          <Typography
+            style={{ marginTop: -18, fontSize: 18, marginLeft: 20 }}
+            component="p"
+          >
+            <b>{`${user.items.length} Items shared ${
+              user.borrowed.length
+            } Items borrowed`}</b>
           </Typography>
-          <Typography variant="headline" component="h2">
-            be{bull}nev{bull}o{bull}lent
-          </Typography>
-          <Typography component="p">
-            well meaning and kindly.<br />
-            {'"a benevolent smile"'}
-          </Typography>
+          <Typography
+            style={{ marginTop: 5, marginLeft: 20, fontSize: 16 }}
+            component="p"
+          >{`"${user.bio}"`}</Typography>
         </CardContent>
       </Card>
     </div>
@@ -48,7 +64,8 @@ function ProfileCard(props) {
 }
 
 ProfileCard.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(ProfileCard);
