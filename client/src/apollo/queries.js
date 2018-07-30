@@ -11,6 +11,7 @@ const ItemFields = gql`
     id
     title
     description
+    imageurl
     itemowner {
       id
       fullname

@@ -2,14 +2,10 @@ import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import gql from 'graphql-tag';
-import { Redirect } from 'react-router';
-import { Query } from 'react-apollo';
 // import { Redirect } from 'react-router-dom'
 import AccountForm from '../../components/AccountForm';
 
 import styles from './styles';
-import { ViewerContext } from '../../context/ViewerProvider';
 
 const Home = ({ classes }) => (
   <Grid
@@ -37,13 +33,3 @@ const Home = ({ classes }) => (
 );
 
 export default withStyles(styles)(Home);
-
-{
-  /* <Query query={GET_TAGS} variables={{ filter: 2 }}>
-    {({ loading, error, data }) => {
-      if (loading) return 'Loading...';
-      if (error) return `Error! ${error.message}`; */
-}
-{
-  /* </Query> */
-}

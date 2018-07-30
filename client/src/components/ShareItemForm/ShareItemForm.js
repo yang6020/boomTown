@@ -25,11 +25,14 @@ class ShareForm extends Component {
     this.state = {
       fileSelected: false,
       selectedTags: [],
-      submitted: false,
-      imageurl: ''
+      submitted: false
     };
     this.fileRef = React.createRef();
   }
+  componentWillMount = () => {
+    this.props.resetNewItem();
+    this.props.resetImage();
+  };
 
   handleCheckbox(event) {
     this.setState({
@@ -132,16 +135,22 @@ class ShareForm extends Component {
           }
           return (
             <Form
-              onSubmit={values => {
+              onSubmit={(values, form) => {
                 this.saveItem(values, tags, addItem);
+                this.setState({ selectedTags: [], fileSelected: false });
+                form.reset();
+                this.props.resetNewItem();
+                this.props.resetImage();
               }}
               initialValues={{}}
-              render={({ handleSubmit, submitting, pristine, values }) => (
-                <form
-                  onSubmit={event => {
-                    handleSubmit(event);
-                  }}
-                >
+              render={({
+                handleSubmit,
+                submitting,
+                pristine,
+                values,
+                form
+              }) => (
+                <form onSubmit={handleSubmit}>
                   <FormSpy
                     subscription={{ values: true }}
                     component={({ values }) => {

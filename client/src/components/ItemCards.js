@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -12,32 +11,29 @@ import CardHeader from '@material-ui/core/CardHeader';
 
 const styles = theme => ({
   card: {
+    display: 'flex',
+    flexDirection: 'column',
     height: '100%',
-    [theme.breakpoints.up('md')]: {
-      maxHeight: 500
-    },
-    [theme.breakpoints.up('sm')]: {
-      maxHeight: 500
-    },
-    [theme.breakpoints.up('xs')]: {
-      maxHeight: 500
+    [theme.breakpoints.down('xs')]: {
+      margin: 12
     }
   },
   media: {
     height: 0,
     paddingTop: '56.25%' // 16:9
+  },
+  content: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center'
   }
 });
 
 const ItemCard = ({ classes, item }) => {
   return (
     <Card className={classes.card}>
-      <CardMedia
-        className={classes.media}
-        image={item.imageurl}
-        title="Contemplative Reptile"
-      />
-      <CardContent>
+      <CardMedia className={classes.media} image={item.imageurl} title="" />
+      <CardContent className={classes.content}>
         <CardHeader
           align="left"
           style={{ border: 0 }}

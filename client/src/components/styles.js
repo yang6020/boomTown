@@ -1,7 +1,5 @@
 const styles = theme => ({
   card: {
-    maxWidth: 798,
-    maxHeight: 730.32,
     height: '100%',
     justify: 'space-between'
   },

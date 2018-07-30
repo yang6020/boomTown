@@ -1,21 +1,15 @@
 import red from '@material-ui/core/colors/red';
 
 const styles = theme => ({
-  smallGrid: {
+  smaller: {
     padding: '12px'
   },
-  grid: {
-    marginTop: 20,
-    flex: 'wrap',
+  root: {
+    marginTop: 80,
     flexGrow: 1,
+    minHeight: '100%',
     background: theme.palette.secondary.main,
-    padding: 0,
-    [theme.breakpoints.up('sm')]: {
-      padding: theme.spacing.unit * 8
-    },
-    [theme.breakpoints.up('md')]: {
-      padding: theme.spacing.unit * 8
-    }
+    padding: theme.spacing.unit * 5
   },
 
   actions: {

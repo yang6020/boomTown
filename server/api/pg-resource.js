@@ -68,9 +68,16 @@ module.exports = function(postgres) {
     },
 
     async getItems(idToOmit) {
-      let text = `SELECT * FROM items`;
+      let text = `SELECT item.id, item.title,item.description,item.created, item.ownerid, item.borrowerid, up.data as imageurl 
+      FROM items item
+      INNER JOIN uploads up
+      ON up.itemid = item.id`;
       if (idToOmit) {
-        text = `SELECT * FROM items WHERE $1 != items.ownerid`;
+        text = `SELECT item.id, item.title,item.description,item.created, item.ownerid, item.borrowerid, up.data as imageurl 
+        FROM items item
+        INNER JOIN uploads up
+        ON up.itemid = item.id
+        WHERE item.ownerid != $1 AND item.borrowerid is NULL`;
       }
 
       try {
@@ -92,7 +99,11 @@ module.exports = function(postgres) {
            *  @TODO: Advanced queries
            *  Get all Items. Hint: You'll need to use a LEFT INNER JOIN among others
            */
-          text: `SELECT * FROM items WHERE items.ownerid =$1;`,
+          text: `SELECT item.id, item.title,item.description,item.created, item.ownerid, item.borrowerid, up.data as imageurl 
+          FROM items item
+          INNER JOIN uploads up
+          ON up.itemid = item.id
+          WHERE item.ownerid != $1 AND item.borrowerid is NULL`,
           values: [id]
         });
         return items.rows;
@@ -135,6 +146,7 @@ module.exports = function(postgres) {
         throw 'Tags for item were not found.';
       }
     },
+
     async saveNewItem({ item, image, user }) {
       /**
        *  @TODO: Adding a New Item
@@ -174,22 +186,23 @@ module.exports = function(postgres) {
 
               imageStream.on('end', async () => {
                 // Image has been converted, begin saving things
-
                 const { title, description, tags } = item;
+
+                const newItemInsert = {
+                  text: `
+                    INSERT INTO items (title,description, ownerid) VALUES ($1, $2, $3)
+                    RETURNING *`,
+                  values: [title, description, user.id]
+                };
                 // Generate new Item query
                 // @TODO
                 // -------------------------------
-                const newItemQuery = {
-                  text:
-                    'INSERT INTO items (title, description, ownerid) VALUES ($1, $2, $3) RETURNING *',
-                  values: [title, description, user.id]
-                };
-                const newItem = client.query(newItemQuery);
+
+                // Insert new Item
+
+                const newItem = await client.query(newItemInsert);
                 const itemid = newItem.rows[0].id;
 
-                // insertItemQuery
-                // Insert new Item
-                // @TODO
                 // -------------------------------
 
                 const imageUploadQuery = {
@@ -203,15 +216,14 @@ module.exports = function(postgres) {
                     base64Str
                   ]
                 };
-
-                // Upload image
-                await client.query(imageUploadQuery);
+                try {
+                  // Upload image
+                  await client.query(imageUploadQuery);
+                } catch (e) {
+                  console.log(e);
+                }
 
                 // Generate tag relationships query (use the'tagsQueryString' helper function provided)
-                // @TODO
-                // -------------------------------
-
-                // Insert tags
                 // @TODO
                 // -------------------------------
                 const tagsQuery = {
@@ -223,7 +235,15 @@ module.exports = function(postgres) {
                     )}`,
                   values: tags.map(tag => tag.id)
                 };
-                const tags = await client.query(tagsQuery);
+                try {
+                  await client.query(tagsQuery);
+                } catch (e) {
+                  console.log(e);
+                }
+                // Insert tags
+                // @TODO
+                // -------------------------------
+
                 // Commit the entire transaction!
                 client.query('COMMIT', err => {
                   if (err) {

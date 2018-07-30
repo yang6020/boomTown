@@ -2,8 +2,6 @@ import { adopt } from 'react-adopt';
 import { Mutation } from 'react-apollo';
 import React from 'react';
 
-import client from '../apollo';
-
 import {
   VIEWER_QUERY,
   LOGIN_MUTATION,

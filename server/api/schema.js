@@ -16,17 +16,18 @@ module.exports = gql`
 
   directive @auth on OBJECT | FIELD_DEFINITION
 
-  type Item {
+  type Item @auth {
     id: ID!
     title: String!
     description: String!
+    imageurl: String!
     itemowner: User!
     tags: [Tag]
     created: Date!
     borrower: User
   }
 
-  type User {
+  type User @auth {
     id: ID!
     email: String!
     fullname: String!
@@ -35,12 +36,12 @@ module.exports = gql`
     borrowed: [Item]
   }
 
-  type Tag {
+  type Tag @auth {
     id: ID!
     title: String!
   }
 
-  type File {
+  type File @auth {
     id: ID!
     filename: String!
     mimetype: String!
