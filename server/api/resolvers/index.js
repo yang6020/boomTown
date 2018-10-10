@@ -169,7 +169,6 @@ module.exports = function(app) {
           image: image,
           user
         });
-        console.log(item);
         return newItem;
       }
     }

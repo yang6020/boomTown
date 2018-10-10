@@ -46,15 +46,6 @@ class ShareForm extends Component {
       .join(', ');
   }
 
-  applyTags(tags) {
-    return (
-      tags &&
-      tags
-        .filter(t => this.state.selectedTags.indexOf(t.id) > -1)
-        .map(t => ({ title: t.title, id: t.id }))
-    );
-  }
-
   async saveItem(values, tags, addItem) {
     const {
       validity,
@@ -78,7 +69,6 @@ class ShareForm extends Component {
       console.log(e);
     }
   }
-  onSubmit = values => {};
   handleImageSelect = event => {
     this.setState({ fileSelected: event.target.files[0] });
   };

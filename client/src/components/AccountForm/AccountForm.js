@@ -125,7 +125,6 @@ class AccountForm extends Component {
                           className={classes.formToggle}
                           type="button"
                           onClick={() => {
-                            // @TODO: Reset the form on submit
                             this.setState({
                               formToggle: !this.state.formToggle
                             });
@@ -140,6 +139,7 @@ class AccountForm extends Component {
                   </FormControl>
                   <Typography className={classes.errorMessage}>
                     {login.error ? 'email/password is incorrect' : null}
+                    {signup.error ? 'tough lucky buddy make a new one' : null}
                   </Typography>
                 </form>
               )}
